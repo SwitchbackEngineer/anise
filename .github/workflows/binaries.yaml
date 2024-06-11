@@ -13,7 +13,7 @@ env:
 # Source: https://github.com/emilk/egui/blob/23732be0e5b9a977afb08a2e7cb23c31955abe43/.github/workflows/rust.yml
 
 jobs:
-    build-linux:
+    linux:
         name: Build Linux GUI
         runs-on: ubuntu-22.04
         steps:
@@ -29,14 +29,18 @@ jobs:
                 version: 1.0
                 execute_install_scripts: true
             
-            - name: Build Linux executable
-              run: cargo build --release --bin anise-gui --workspace --exclude anise-py
+            - name: Build Linux executables
+              run: |
+               cargo build --release --bin anise-gui --workspace --exclude anise-py
+               cargo build --release --bin anise-cli --workspace --exclude anise-py
             
             - name: Save executable
               uses: actions/upload-artifact@v3
               with:
-                name: anise-gui-linux
-                path: target/release/anise-gui
+                name: anise-linux-binaries
+                path: |
+                 target/release/anise-gui
+                 target/release/anise-cli
                 if-no-files-found: error
 
     windows:
@@ -49,12 +53,16 @@ jobs:
             - name: Set up cargo cache
               uses: Swatinem/rust-cache@v2
     
-            - name: Build Windows executable
-              run: cargo build --release --bin anise-gui --workspace --exclude anise-py
+            - name: Build Windows executables
+              run: |
+               cargo build --release --bin anise-gui --workspace --exclude anise-py
+               cargo build --release --bin anise-cli --workspace --exclude anise-py
 
             - name: Save executable
               uses: actions/upload-artifact@v3
               with:
-                name: anise-gui-windows
-                path: target\release\anise-gui.exe
+                name: anise-windows-binaries
+                path: |
+                 target\release\anise-gui.exe
+                 target\release\anise-cli.exe
                 if-no-files-found: error

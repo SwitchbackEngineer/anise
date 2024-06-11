@@ -11,6 +11,7 @@
 use std::mem::size_of_val;
 
 use anise::{
+    constants::frames::{EARTH_J2000, SUN_J2000},
     file2heap,
     naif::{
         daf::{datatypes::Type2ChebyshevSet, NAIFDataSet, DAF},
@@ -248,6 +249,26 @@ fn test_spk_truncate_cheby() {
     let summary = reloaded.data_summaries().unwrap()[idx];
     assert_eq!(summary.start_epoch(), new_start);
 
+    // Ensure that the data can be queried correctly
+    let o_almanac = Almanac::from_spk(my_spk.clone()).unwrap();
+    let n_almanac = Almanac::from_spk(reloaded).unwrap();
+    assert_ne!(
+        o_almanac.spk_domain(summary.target_id).unwrap(),
+        n_almanac.spk_domain(summary.target_id).unwrap()
+    );
+
+    let (start, end) = n_almanac.spk_domain(summary.target_id).unwrap();
+    for epoch in TimeSeries::exclusive(start, end, Unit::Day * 365.25) {
+        assert_eq!(
+            o_almanac
+                .transform(EARTH_J2000, SUN_J2000, epoch, None)
+                .unwrap(),
+            n_almanac
+                .transform(EARTH_J2000, SUN_J2000, epoch, None)
+                .unwrap()
+        );
+    }
+
     // Test that we can remove segments all togethet
     let mut my_spk_rm = my_spk.to_mutable();
     assert!(my_spk_rm.delete_nth_data(idx).is_ok());
@@ -261,4 +282,24 @@ fn test_spk_truncate_cheby() {
         reloaded.summary_from_id(301).is_err(),
         "summary 301 not removed"
     );
+
+    // Ensure that the data can be queried correctly
+    let o_almanac = Almanac::from_spk(my_spk).unwrap();
+    let n_almanac = Almanac::from_spk(reloaded).unwrap();
+    assert_eq!(
+        o_almanac.spk_domain(399).unwrap(),
+        n_almanac.spk_domain(399).unwrap()
+    );
+
+    let (start, end) = o_almanac.spk_domain(399).unwrap();
+    for epoch in TimeSeries::exclusive(start, end, Unit::Day * 365.25) {
+        assert_eq!(
+            o_almanac
+                .transform(EARTH_J2000, SUN_J2000, epoch, None)
+                .unwrap(),
+            n_almanac
+                .transform(EARTH_J2000, SUN_J2000, epoch, None)
+                .unwrap()
+        );
+    }
 }
