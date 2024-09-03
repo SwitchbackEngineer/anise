@@ -25,6 +25,8 @@ use snafu::prelude::*;
 
 #[cfg(feature = "python")]
 use pyo3::prelude::*;
+#[cfg(feature = "python")]
+use pyo3_stub_gen::derive::*;
 
 #[derive(Debug, PartialEq, Snafu)]
 #[snafu(visibility(pub(crate)))]
@@ -54,6 +56,7 @@ pub enum MetaAlmanacError {
 }
 
 #[cfg_attr(feature = "python", pymethods)]
+#[cfg_attr(feature = "python", gen_stub_pymethods)]
 impl Almanac {
     /// Load from the provided MetaFile.
     fn _load_from_metafile(&self, mut metafile: MetaFile, autodelete: bool) -> AlmanacResult<Self> {

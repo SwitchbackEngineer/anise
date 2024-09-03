@@ -15,7 +15,7 @@ use anise::structure::dataset::DataSetError;
 use anise::structure::planetocentric::ellipsoid::Ellipsoid;
 use pyo3::{prelude::*, py_run};
 
-pub(crate) fn register_utils(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
+pub(crate) fn register_utils(parent_module: &Bound<PyModule>) -> PyResult<()> {
     let sm = PyModule::new_bound(parent_module.py(), "utils")?;
     sm.add_class::<Ellipsoid>()?;
     sm.add_function(wrap_pyfunction!(convert_fk, &sm)?)?;

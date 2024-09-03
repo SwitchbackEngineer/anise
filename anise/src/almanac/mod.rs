@@ -55,12 +55,16 @@ mod embed;
 #[cfg(feature = "python")]
 use pyo3::prelude::*;
 
+#[cfg(feature = "python")]
+use pyo3_stub_gen::derive::*;
+
 /// An Almanac contains all of the loaded SPICE and ANISE data.
 ///
 /// # Limitations
 /// The stack space required depends on the maximum number of each type that can be loaded.
 #[derive(Clone, Default)]
 #[cfg_attr(feature = "python", pyclass)]
+#[cfg_attr(feature = "python", gen_stub_pyclass)]
 #[cfg_attr(feature = "python", pyo3(module = "anise"))]
 pub struct Almanac {
     /// NAIF SPK is kept unchanged

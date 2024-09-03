@@ -11,7 +11,7 @@ description = { workspace = true }
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
 name = "anise"
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 anise = { workspace = true, features = ["python", "metaload"] }
@@ -19,3 +19,8 @@ snafu = { workspace = true }
 hifitime = { workspace = true, features = ["python"] }
 pyo3 = { workspace = true, features = ["extension-module"] }
 pyo3-log = { workspace = true }
+pyo3-stub-gen-derive = { workspace = true }
+pyo3-stub-gen = { workspace = true }
+
+[[bin]]
+name = "stub_gen"

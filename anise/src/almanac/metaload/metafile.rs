@@ -27,6 +27,8 @@ use pyo3::exceptions::PyTypeError;
 use pyo3::prelude::*;
 #[cfg(feature = "python")]
 use pyo3::pyclass::CompareOp;
+#[cfg(feature = "python")]
+use pyo3_stub_gen::derive::*;
 
 use crate::file2heap;
 use crate::prelude::InputOutputError;
@@ -39,6 +41,7 @@ use super::MetaAlmanacError;
 /// Prior to loading a remote resource, if the local resource exists, its CRC32 will be computed: if it matches the CRC32 of this instance of MetaFile,
 /// then the file will not be downloaded a second time.
 #[cfg_attr(feature = "python", pyclass)]
+#[cfg_attr(feature = "python", gen_stub_pyclass)]
 #[cfg_attr(feature = "python", pyo3(module = "anise"))]
 #[cfg_attr(feature = "python", pyo3(get_all, set_all))]
 #[derive(Clone, Debug, Default, Serialize, Deserialize, PartialEq, StaticType)]

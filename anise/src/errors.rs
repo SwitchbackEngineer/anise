@@ -26,6 +26,10 @@ use crate::almanac::metaload::MetaAlmanacError;
 #[cfg(feature = "metaload")]
 use crate::almanac::metaload::MetaFile;
 
+#[cfg(feature = "python")]
+use pyo3_stub_gen::derive::*;
+
+#[cfg_attr(feature = "python", gen_stub_pyclass_enum)]
 #[derive(Debug, PartialEq, Snafu)]
 #[snafu(visibility(pub))]
 pub enum AlmanacError {

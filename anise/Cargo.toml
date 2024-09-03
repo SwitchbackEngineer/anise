@@ -30,6 +30,8 @@ heapless = { workspace = true }
 rstest = { workspace = true }
 pyo3 = { workspace = true, optional = true }
 pyo3-log = { workspace = true, optional = true }
+pyo3-stub-gen-derive = { workspace = true, optional = true }
+pyo3-stub-gen = { workspace = true, optional = true }
 url = { version = "2.5.0", optional = true }
 serde = { workspace = true }
 serde_derive = { workspace = true }
@@ -60,7 +62,7 @@ reqwest = { version = "0.12", features = ["blocking"], optional = true }
 default = ["metaload"]
 # Enabling this flag significantly increases compilation times due to Arrow and Polars.
 spkezr_validation = []
-python = ["pyo3", "pyo3-log"]
+python = ["pyo3", "pyo3-log", "pyo3-stub-gen", "pyo3-stub-gen-derive"]
 metaload = ["url", "reqwest/blocking", "platform-dirs", "regex", "serde_dhall"]
 embed_ephem = ["rust-embed", "reqwest/blocking"]
 

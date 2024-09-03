@@ -24,7 +24,7 @@ mod utils;
 
 /// A Python module implemented in Rust.
 #[pymodule]
-fn anise(m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn anise(m: &Bound<PyModule>) -> PyResult<()> {
     pyo3_log::init();
     register_time_module(m)?;
     astro::register_astro(m)?;
@@ -37,7 +37,7 @@ fn anise(m: &Bound<'_, PyModule>) -> PyResult<()> {
 }
 
 /// Reexport hifitime as anise.time
-fn register_time_module(parent_module: &Bound<'_, PyModule>) -> PyResult<()> {
+fn register_time_module(parent_module: &Bound<PyModule>) -> PyResult<()> {
     let sm = PyModule::new_bound(parent_module.py(), "time")?;
 
     sm.add_class::<Epoch>()?;
