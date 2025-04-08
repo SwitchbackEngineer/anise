@@ -11,6 +11,8 @@ cargo-fuzz = true
 libfuzzer-sys = { version = "0.4", features = ["arbitrary-derive"] }
 hifitime = { workspace = true }
 bytes = "1.0"
+log = "0.4"
+env_logger = "0.11"
 
 [dependencies.anise]
 path = ".."
