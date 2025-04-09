@@ -10,7 +10,7 @@
 
 use bytes::Bytes;
 use hifitime::TimeScale;
-use log::info;
+use log::{info, warn};
 use snafu::ResultExt;
 use zerocopy::FromBytes;
 
@@ -172,7 +172,17 @@ impl Almanac {
 
             // Now, we can load this depending on the kind of data that it is
             match dataset_type {
-                DataSetType::NotApplicable => unreachable!("no such ANISE data yet"),
+                //DataSetType::NotApplicable => unreachable!("no such ANISE data yet"),
+                DataSetType::NotApplicable => {
+                    warn!(
+                        "Encountered unsupported dataset type: {:?} in {}",
+                        metadata.dataset_type,
+                        path.unwrap_or("bytes")
+                    );
+                    return Err(AlmanacError::GenericError {
+                        err: "Encountered DataSetType::NotApplicable, which is not supported for loading".to_string(),
+                    });
+                }
                 DataSetType::SpacecraftData => {
                     // Decode as spacecraft data
                     let dataset = SpacecraftDataSet::try_from_bytes(bytes).context({
