@@ -252,7 +252,8 @@ impl<'a, const ENTRIES: usize> Decode<'a> for LookUpTable<ENTRIES> {
         }
 
         for (name, entry) in names.iter().zip(name_entries.iter()) {
-            let key = core::str::from_utf8(name.as_bytes()).unwrap();
+            //let key = core::str::from_utf8(name.as_bytes()).unwrap();
+            let key = core::str::from_utf8(name.as_bytes())?;
             lut.by_name
                 .insert(
                     key[..KEY_NAME_LEN.min(key.len())].try_into().unwrap(),
