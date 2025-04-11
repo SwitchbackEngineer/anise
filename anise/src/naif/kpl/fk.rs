@@ -33,7 +33,7 @@ impl KPLItem for FKItem {
                     Ok(frame_id) => frame_id,
                     Err(_) => {
                         // The frame ID is not in the key, so we must be a name key.
-                        data.value.trim().parse::<i32>().unwrap()
+                        data.value.trim().parse::<i32>().unwrap_or(-1)
                     }
                 },
                 None => -1,
@@ -53,9 +53,12 @@ impl KPLItem for FKItem {
                 None => {
                     // The data always starts with the definition of the frame
                     // So if the body isn't set, it'll be the first item to set
-                    let next_ = data.keyword.find('_').unwrap();
-                    self.name = Some(data.keyword[next_ + 1..].to_string());
-                    self.body_id = Some(data.value.parse::<i32>().unwrap());
+                    if let Some(next_) = data.keyword.find('_') {
+                        self.name = Some(data.keyword[next_ + 1..].to_string());
+                        self.body_id = data.value.parse::<i32>().ok();
+                    } else {
+                        warn!("Failed to find '_' in keyword: {}", data.keyword);
+                    }
                 }
                 Some(body_id) => {
                     // The parameter starts with the ID of the frame.
