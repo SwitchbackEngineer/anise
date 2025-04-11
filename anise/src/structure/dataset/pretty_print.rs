@@ -37,12 +37,24 @@ impl EulerParameterDataSet {
         let mut rows = Vec::new();
 
         for (opt_id, opt_name) in values {
+            /*
             let data = if let Some(id) = opt_id {
                 self.get_by_id(*id).unwrap()
             } else {
                 self.get_by_name(&opt_name.clone().unwrap()).unwrap()
             };
-
+            */
+            let data = if let Some(id) = opt_id {
+                match self.get_by_id(*id) {
+                    Ok(d) => d,
+                    Err(_) => continue,
+                }
+            } else {
+                match self.get_by_name(&opt_name.clone().unwrap()) {
+                    Ok(d) => d,
+                    Err(_) => continue,
+                }
+            };
             let row = EulerParamRow {
                 name: match opt_name {
                     Some(name) => format!("{name}"),
