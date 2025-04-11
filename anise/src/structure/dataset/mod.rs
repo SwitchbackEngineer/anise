@@ -486,7 +486,8 @@ impl<'a, T: DataSetT, const ENTRIES: usize> Decode<'a> for DataSet<T, ENTRIES> {
         let mut idx = 0;
         for meta_idx in 0..*bytes_meta.get(0).unwrap() as usize {
             let next_len = *bytes_meta.get(meta_idx + 1).unwrap() as usize;
-            let this_data = T::from_der(&bytes[idx..idx + next_len]).unwrap();
+            //let this_data = T::from_der(&bytes[idx..idx + next_len]).unwrap();
+            let this_data = T::from_der(&bytes[idx..idx + next_len])?;
             data.push(this_data);
             idx += next_len;
         }
