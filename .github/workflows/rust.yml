@@ -79,6 +79,38 @@ jobs:
           cargo build --features embed_ephem --release
           cargo doc --features embed_ephem
 
+      # - name: Fuzz test
+      #   # if: env.RUN_FUZZ_TESTS == 'true'
+      #   # timeout-minutes: 120 # The fuzz tests take a long time to build
+      #   run: |
+      #     # Fuzz test the Rust anise library
+      #     # cargo-fuzz requires the nightly toolchain
+      #     rustup install nightly
+      #     cargo +nightly install cargo-fuzz
+      #     cd anise # Build only the Rust library
+      #     cargo +nightly fuzz build --release
+      #     ./fuzz/run_fuzz_tests.sh
+
+      - name: Cache Rust toolchain
+        uses: actions/cache@v4
+        with:
+          path: ~/.rustup
+          key: ${{ runner.os }}-rust-nightly
+          restore-keys: |
+            ${{ runner.os }}-rust-
+
+      - name: Install nightly toolchain
+        run: rustup install nightly
+
+      - name: Install cargo-fuzz
+        run: cargo +nightly install cargo-fuzz
+
+      - name: Fuzz test the Rust anise library
+        run: |
+          cd anise # Build only the Rust library
+          cargo +nightly fuzz build --release
+          ./fuzz/run_fuzz_tests.sh
+
   lints:
     name: Lints
     runs-on: ubuntu-latest
